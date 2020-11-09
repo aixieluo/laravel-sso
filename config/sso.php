@@ -3,6 +3,7 @@
 return [
     // 主域名
     'domain' => env('DOMAIN_URL'),
+    'account' => env('ACCOUNT_URL'),
     // OAUTH2
     'oauth'  => [
         'client_id'     => env('OAUTH_CLIENT_ID'),
