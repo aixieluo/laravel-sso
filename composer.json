@@ -1,0 +1,30 @@
+{
+    "name": "aixieluo/laravel-sso",
+    "license": "MIT",
+    "require": {
+        "php": "^7.3",
+        "kitetail/zttp": "^0.6.0",
+        "laravel/framework": "^8.0"
+    },
+    "authors": [
+        {
+            "name": "aixieluo",
+            "email": "admin@aixieluo.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Aixieluo\\LaravelSso\\": "src"
+        },
+        "files": [
+            "helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aixieluo\\LaravelSso\\SsoServiceProvider"
+            ]
+        }
+    }
+}
