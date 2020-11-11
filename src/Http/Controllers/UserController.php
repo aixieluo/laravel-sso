@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Zttp\Zttp;
+use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
@@ -78,5 +79,20 @@ class UserController extends Controller
             Log::error(json_encode($tokens));
             throw new Exception('请求失败');
         }
+    }
+
+    /**
+     * @Post(
+     *     path="/logout",
+     *     summary="登出",
+     *     tags={"user"},
+     *     @\OpenApi\Annotations\Response(response="200", description="")
+     * )
+     */
+    public function logout()
+    {
+        $c1 = Cookie::forget('access_token', '/', config('sso.domain'));
+        $c2 = Cookie::forget('refresh_token', '/', config('sso.domain'));
+        return Response::json()->withCookie($c1)->withCookie($c2);
     }
 }
