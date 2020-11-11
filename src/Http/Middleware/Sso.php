@@ -1,6 +1,6 @@
 <?php
 
-namespace Aixieluo\LaravelSso\Middleware;
+namespace Aixieluo\LaravelSso\Http\Middleware;
 
 use Aixieluo\LaravelSso\Services\OAuthService;
 use Closure;
