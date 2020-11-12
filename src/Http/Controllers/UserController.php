@@ -37,8 +37,9 @@ class UserController extends Controller
             'state'         => $state
         ]);
         redirect()->setIntendedUrl(session()->previousUrl() ?? '/');
+        session(['state' => $state]);
 
-        return redirect(account_url('/oauth/authorize?') . $query)->cookie(Cookie::make('state', $state, 15, '/', config('sso.domain')));
+        return redirect(account_url('/oauth/authorize?') . $query);
     }
 
     /**
@@ -58,6 +59,7 @@ class UserController extends Controller
      */
     public function accessToken(Request $request)
     {
+        throw_unless(session()->pull('state') === $request->input('state'), Exception::class, 'Invalid State');
         $params = array_merge(config('sso.oauth'),
             [
                 'code' => $request->input('code')
