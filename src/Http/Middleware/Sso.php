@@ -50,7 +50,7 @@ class Sso
 
     protected function getHeaderAccessToken()
     {
-        return ltrim($this->request->header('Authorization'), 'Bearer ') ?: null;
+        return trim(ltrim($this->request->header('Authorization'), 'Bearer')) ?: null;
     }
 
     protected function getQueryAccessToken()
