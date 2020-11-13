@@ -65,7 +65,7 @@ class UserController extends Controller
                 'code' => $request->input('code')
             ]);
         try {
-            $response = Zttp::post(account_url('oauth/token'), $params);
+            $response = Zttp::post(account_api('oauth/token'), $params);
             $tokens = $response->json();
             Validator::make($tokens, [
                 'token_type'    => 'required',
