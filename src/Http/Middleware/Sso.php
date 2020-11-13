@@ -2,13 +2,13 @@
 
 namespace Aixieluo\LaravelSso\Http\Middleware;
 
+use Aixieluo\LaravelSso\Exception\UnauthorizedException;
 use Aixieluo\LaravelSso\Services\OAuthService;
 use Closure;
 use Exception;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\UnauthorizedException;
 
 class Sso
 {
@@ -30,7 +30,6 @@ class Sso
     {
         $this->request = $request;
         $token = $this->getAccessToken();
-        $request->merge(compact('token'));
         try {
             if ($token === session('access_token') && session('user')) {
                 auth()->setUser(session('user'));

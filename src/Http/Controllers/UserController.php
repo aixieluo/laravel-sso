@@ -3,6 +3,7 @@
 namespace Aixieluo\LaravelSso\Http\Controllers;
 
 use Exception;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cookie;
@@ -36,7 +37,11 @@ class UserController extends Controller
             'scope'         => '*',
             'state'         => $state
         ]);
-        redirect()->setIntendedUrl(session()->previousUrl() ?? '/');
+        $previousUrl = session()->previousUrl();
+        if (! $previousUrl || Str::contains(session('url.intended'), 'oauth/code')) {
+            $previousUrl = config('sso.home');
+        }
+        redirect()->setIntendedUrl($previousUrl);
         session(['state' => $state]);
 
         return redirect(account_url('/oauth/authorize?') . $query);
@@ -65,9 +70,9 @@ class UserController extends Controller
                 'code' => $request->input('code')
             ]);
         try {
-            $response = Zttp::post(account_api('oauth/token'), $params);
+            $response = Zttp::post(account_url('oauth/token'), $params);
             $tokens = $response->json();
-            Validator::make($tokens, [
+            Validator::make((array)$tokens, [
                 'token_type'    => 'required',
                 'expires_in'    => 'required',
                 'access_token'  => 'required',

@@ -1,11 +1,13 @@
 <?php
 
 return [
+    // 默认跳转地址
+    'home'    => '/',
     // 主域名
-    'domain' => env('DOMAIN_URL'),
+    'domain'  => env('DOMAIN_URL'),
     'account' => env('ACCOUNT_URL'),
     // OAUTH2
-    'oauth'  => [
+    'oauth'   => [
         'client_id'     => env('OAUTH_CLIENT_ID'),
         'client_secret' => env('OAUTH_CLIENT_SECRET'),
         'redirect_uri'  => env('OAUTH_CALLBACK'),
