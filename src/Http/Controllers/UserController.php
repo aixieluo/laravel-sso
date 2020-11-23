@@ -3,15 +3,14 @@
 namespace Aixieluo\LaravelSso\Http\Controllers;
 
 use Exception;
-use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Zttp\Zttp;
-use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
@@ -37,7 +36,7 @@ class UserController extends Controller
             'scope'         => '*',
             'state'         => $state
         ]);
-        $previousUrl = session()->previousUrl();
+        $previousUrl = $request->input('referer') ?: session()->previousUrl();
         if (! $previousUrl || Str::contains(session('url.intended'), 'oauth/code')) {
             $previousUrl = config('sso.home');
         }
@@ -65,8 +64,7 @@ class UserController extends Controller
     public function accessToken(Request $request)
     {
         throw_unless(session()->pull('state') === $request->input('state'), Exception::class, 'Invalid State');
-        $params = array_merge(config('sso.oauth'),
-            [
+        $params = array_merge(config('sso.oauth'), [
                 'code' => $request->input('code')
             ]);
         try {
@@ -78,8 +76,10 @@ class UserController extends Controller
                 'access_token'  => 'required',
                 'refresh_token' => 'required',
             ])->validate();
-            return redirect()->intended()
-                ->withCookie('access_token', $tokens['access_token'], $tokens['expires_in'] / 60, '/', config('sso.domain'))
+            return redirect()
+                ->intended()
+                ->withCookie('access_token', $tokens['access_token'], $tokens['expires_in'] / 60, '/',
+                    config('sso.domain'))
                 ->withCookie('refresh_token', $tokens['refresh_token'], 60 * 24 * 30, '/', config('sso.domain'));;
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
