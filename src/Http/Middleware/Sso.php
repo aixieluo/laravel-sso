@@ -45,7 +45,7 @@ class Sso
         if ($request->wantsJson()) {
             throw new UnauthorizedException();
         }
-        return redirect()->route('oauth.code');
+        return redirect()->route(config('sso.oauth_code_uri'));
     }
 
     protected function getHeaderAccessToken()

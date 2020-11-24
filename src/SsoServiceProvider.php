@@ -51,6 +51,11 @@ class SsoServiceProvider extends ServiceProvider
     {
         Route::prefix('oauth')
             ->namespace('Aixieluo\LaravelSso\Http\Controllers')
+            ->middleware('web')->group(function () {
+                $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+            });
+        Route::prefix('api/oauth')
+            ->namespace('Aixieluo\LaravelSso\Http\Controllers')
             ->middleware('api')->group(function () {
                 $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
             });

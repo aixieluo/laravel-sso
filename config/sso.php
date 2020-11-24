@@ -6,6 +6,7 @@ return [
     // 主域名
     'domain'  => env('DOMAIN_URL'),
     'account' => env('ACCOUNT_URL'),
+    'oauth_code_uri' => env('OAUTH_CODE_URI', 'oauth.code'),
     // OAUTH2
     'oauth'   => [
         'client_id'     => env('OAUTH_CLIENT_ID'),
